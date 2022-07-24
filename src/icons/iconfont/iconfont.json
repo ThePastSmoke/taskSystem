@@ -1,0 +1,114 @@
+{
+  "id": "3541709",
+  "name": "仓储系统",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "4933869",
+      "name": "点",
+      "font_class": "dian",
+      "unicode": "ec1e",
+      "unicode_decimal": 60446
+    },
+    {
+      "icon_id": "16563644",
+      "name": "出库、换货出库",
+      "font_class": "chuku",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "16563722",
+      "name": "换货入库、退货入库",
+      "font_class": "ruku",
+      "unicode": "e60f",
+      "unicode_decimal": 58895
+    },
+    {
+      "icon_id": "10477703",
+      "name": "盘点",
+      "font_class": "pandian",
+      "unicode": "e651",
+      "unicode_decimal": 58961
+    },
+    {
+      "icon_id": "12025953",
+      "name": "待收货",
+      "font_class": "shouhuo",
+      "unicode": "e7a2",
+      "unicode_decimal": 59298
+    },
+    {
+      "icon_id": "13326836",
+      "name": "交接班",
+      "font_class": "jiaojie",
+      "unicode": "e612",
+      "unicode_decimal": 58898
+    },
+    {
+      "icon_id": "21043423",
+      "name": "入库单",
+      "font_class": "rukudan",
+      "unicode": "e67b",
+      "unicode_decimal": 59003
+    },
+    {
+      "icon_id": "21043456",
+      "name": "出库单",
+      "font_class": "chukudan",
+      "unicode": "e67c",
+      "unicode_decimal": 59004
+    },
+    {
+      "icon_id": "26571352",
+      "name": "仓储仓库",
+      "font_class": "kuneiguanli",
+      "unicode": "e637",
+      "unicode_decimal": 58935
+    },
+    {
+      "icon_id": "29150981",
+      "name": "导航栏-工作台",
+      "font_class": "gongzuotai",
+      "unicode": "e630",
+      "unicode_decimal": 58928
+    },
+    {
+      "icon_id": "824991",
+      "name": "上架",
+      "font_class": "shangjia",
+      "unicode": "e613",
+      "unicode_decimal": 58899
+    },
+    {
+      "icon_id": "2545174",
+      "name": "首页-拣货",
+      "font_class": "lianhuo",
+      "unicode": "e63a",
+      "unicode_decimal": 58938
+    },
+    {
+      "icon_id": "3702976",
+      "name": "盘点单",
+      "font_class": "pandiandan",
+      "unicode": "e655",
+      "unicode_decimal": 58965
+    },
+    {
+      "icon_id": "4933384",
+      "name": "商务",
+      "font_class": "shangwu",
+      "unicode": "e74f",
+      "unicode_decimal": 59215
+    },
+    {
+      "icon_id": "5387871",
+      "name": "介绍信息_o",
+      "font_class": "xinxi",
+      "unicode": "eb7a",
+      "unicode_decimal": 60282
+    }
+  ]
+}
