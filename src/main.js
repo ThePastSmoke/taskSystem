@@ -3,8 +3,10 @@ import Vue from 'vue'
 import 'normalize.css/normalize.css' // A modern alternative to CSS resets
 
 import ElementUI from 'element-ui'
-import 'element-ui/lib/theme-chalk/index.css'
-import locale from 'element-ui/lib/locale/lang/en' // lang i18n
+// import 'element-ui/lib/theme-chalk/index.css'
+// 引入自定义主题css
+import '@/styles/theme/index.css'
+import locale from 'element-ui/lib/locale/lang/zh-CN' // lang i18n
 // 引入echarts
 
 import '@/styles/index.scss' // global css

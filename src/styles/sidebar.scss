@@ -29,6 +29,7 @@
 
     .scrollbar-wrapper {
       overflow-x: hidden !important;
+      padding-right: 20px !important;
     }
 
     .el-scrollbar__bar.is-vertical {
@@ -81,7 +82,12 @@
     // 点击一级菜单颜色
     .is-active > .el-submenu__title {
       color: #ffc12f !important;
-      background: #fff6e2 !important;;
+      background: #fff6e2 !important;
+      border-radius: 0 100px 100px 0;
+
+      .el-submenu__icon-arrow {
+        color: #ffc12f;
+      }
     }
 
     & .nest-menu .el-submenu > .el-submenu__title,
@@ -245,7 +251,6 @@
 
 .el-submenu__title {
   color: rgb(136, 126, 126) !important;
-
 }
 
 .el-menu-item {
@@ -257,3 +262,55 @@
     background-color: transparent !important;
   }
 }
+
+//icon样式
+.el-submenu__title {
+  .iconfont {
+    margin-right: 16px;
+    font-size: 20px;
+  }
+}
+
+.router-link-active {
+  .el-menu-item {
+    background: #fff6e2 !important;
+    border-radius: 0 100px 100px 0;
+
+
+    //span {
+    //  color: #ffc12f !important;
+    //}
+  }
+}
+
+.is-active {
+  .el-submenu__title {
+    .iconfont {
+      color: #ffc12f !important;
+    }
+  }
+
+}
+
+.el-menu-item {
+  .iconfont {
+    margin-right: 16px;
+  }
+}
+
+.router-link-exact-active {
+  span {
+    font-weight: 500;
+    color: #332929 !important;
+  }
+
+  .submenu-title-noDropdown span {
+    color: #ffc12f !important;
+  }
+
+  .iconfont {
+    color: #ffb200 !important;
+  }
+
+}
+

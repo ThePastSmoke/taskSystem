@@ -1,28 +1,58 @@
 <template>
   <el-card class="inout-charts">
     <el-row>
-      <el-col :span="6">
+      <el-col :span="20">
         <div class="grid-content bg-purple-dark">
           <div class="subject">入库出库信息</div>
         </div>
       </el-col>
-      <el-col :span="12">
-        <div class="grid-content bg-purple-dark" />
+      <el-col :span="4">
+        <div class="grid-content bg-purple-dark">
+          <el-radio-group v-model="tabPosition" style="margin-bottom: 30px;" @change="changeInfoList">
+            <el-radio-button label="本周">本周</el-radio-button>
+            <el-radio-button label="本月">本月</el-radio-button>
+            <el-radio-button label="全年">全年</el-radio-button>
+          </el-radio-group>
+        </div>
       </el-col>
     </el-row>
-    <!--    图标-->
-    <div class="chart">1</div>
+    <!--    图表-->
+    <div class="chart" />
   </el-card>
 </template>
 <script>
 import * as echarts from 'echarts'
+import { getSunInfo } from '@/api/home'
 
 export default {
   name: 'TaskInfo',
+  data() {
+    return {
+      tabPosition: '本周',
+      weekInfo: {} // 本周的数据
+    }
+  },
   mounted() {
-    this.echartsInit()
+  },
+  created() {
+    this.changeInfoList()
   },
   methods: {
+    // 请求数据
+    // getSunList: {},
+    // 点击tab标签切换数据
+    async changeInfoList() {
+      if (this.tabPosition === '本周') {
+        this.weekInfo = await getSunInfo('w')
+        this.echartsInit()
+      } else if (this.tabPosition === '本月') {
+        this.weekInfo = await getSunInfo('c')
+        this.echartsInit()
+      } else if (this.tabPosition === '全年') {
+        this.weekInfo = await getSunInfo('e')
+        this.echartsInit()
+      }
+    },
     echartsInit() {
       // const myChar = echarts.init(document.querySelector('.chart'))
       echarts.init(document.querySelector('.chart')).setOption(
@@ -41,12 +71,12 @@ export default {
           },
           legend: {
             show: true,
-            bottom: 0
+            bottom: '-2%'
           },
           xAxis: [
             {
               type: 'category',
-              data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
+              data: this.weekInfo.x,
               axisTick: {
                 alignWithLabel: true
               }
@@ -59,18 +89,18 @@ export default {
           ],
           series: [
             {
-              name: '入库',
+              name: this.weekInfo.data[0].name,
               type: 'bar',
               barWidth: '30%',
               color: '#ff7100',
-              data: [10, 52, 200, 334, 390, 330, 220]
+              data: this.weekInfo.data[0].data
             },
             {
-              name: '出库',
+              name: this.weekInfo.data[1].name,
               type: 'bar',
               barWidth: '30%',
               color: '#ffb200',
-              data: [13, 51, 200, 300, 370, 320, 120]
+              data: this.weekInfo.data[1].data
             }
           ]
         }
@@ -79,6 +109,7 @@ export default {
   }
 }
 </script>
+
 <style scoped lang="scss">
 .inout-charts {
   margin-top: 20px;
@@ -95,10 +126,16 @@ export default {
     line-height: 22px;
   }
 
+  .grid-content {
+    width: 210px;
+    height: 40px;
+  }
+
   .chart {
     margin-top: 20px;
     width: 100%;
-    height: 430px;
+    height: 400px;
   }
+
 }
 </style>

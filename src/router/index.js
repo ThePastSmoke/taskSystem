@@ -1,6 +1,19 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import manageBaseInfo from '@/router/modules/manage-base-info'
+import manageBusiness from '@/router/modules/manage-business'
+import manageStorage from '@/router/modules/manage-storage'
+import manageStorageIn from '@/router/modules/manage-storage-in'
+import manageStorageOut from '@/router/modules/manage-storage-out'
 
+// 动态路由
+export const asyncRoutes = [
+  manageBaseInfo,
+  manageBusiness,
+  manageStorage,
+  manageStorageIn,
+  manageStorageOut
+]
 Vue.use(Router)
 
 /* Layout */
@@ -54,7 +67,7 @@ export const constantRoutes = [
         component: () => import('@/views/dashboard/index'),
         meta: {
           title: '工作台',
-          icon: 'dashboard',
+          icon: 'icon-gongzuotai',
           alwaysShow: true
         }
       }
@@ -69,7 +82,7 @@ const createRouter = () =>
   new Router({
     // mode: 'history', // require service support
     scrollBehavior: () => ({ y: 0 }),
-    routes: constantRoutes
+    routes: [...constantRoutes, ...asyncRoutes]
   })
 
 const router = createRouter()

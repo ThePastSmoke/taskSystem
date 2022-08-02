@@ -1,7 +1,6 @@
 <template>
   <div class="navbar">
-    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
-
+    <!--    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />-->
     <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
@@ -10,19 +9,13 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>
-              关闭左侧
-            </el-dropdown-item>
-          </router-link>
-          <a target="_blank" href="#">
-            <el-dropdown-item>关闭右侧</el-dropdown-item>
-          </a>
-          <a target="_blank" href="#">
-            <el-dropdown-item>关闭其他</el-dropdown-item>
-          </a>
+          <el-dropdown-item @click.native="delLeftList">
+            关闭左侧
+          </el-dropdown-item>
+          <el-dropdown-item @click.native="delRightList">关闭右侧</el-dropdown-item>
+          <el-dropdown-item @click.native="delElse">关闭其他</el-dropdown-item>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">全部关闭</span>
+            <span style="display:block;" @click="delAllLst">全部关闭</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -33,12 +26,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import Breadcrumb from '@/components/Breadcrumb'
-import Hamburger from '@/components/Hamburger'
+// import Hamburger from '@/components/Hamburger'
 
 export default {
   components: {
-    Breadcrumb,
-    Hamburger
+    Breadcrumb
+    // Hamburger
   },
   computed: {
     ...mapGetters([
@@ -51,7 +44,31 @@ export default {
       this.$store.dispatch('app/toggleSideBar')
     },
     async logout() {
-
+    },
+    // 删除vuex里的list
+    delAllLst() {
+      this.$store.commit('user/delList', '')
+    },
+    //  删除其他
+    delElse() {
+      const matched = this.$route.matched.filter(
+        (item) => item.meta && item.meta.title
+      )
+      this.$store.commit('user/delListOnes', matched[matched.length - 1])
+    },
+    //  关闭右侧
+    delRightList() {
+      const matched = this.$route.matched.filter(
+        (item) => item.meta && item.meta.title
+      )
+      this.$store.commit('user/delRightList', matched[matched.length - 1])
+    },
+    //  关闭左侧
+    delLeftList(state, data) {
+      const matched = this.$route.matched.filter(
+        (item) => item.meta && item.meta.title
+      )
+      this.$store.commit('user/delLeftList', matched[matched.length - 1])
     }
   }
 }

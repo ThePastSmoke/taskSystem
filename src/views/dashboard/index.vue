@@ -86,15 +86,33 @@
       <TaskBar />
       <!--入库出口信息-->
       <TaskInfo />
+      <div class="libs">
+        <!--圆形图形-->
+        <el-card class="use-charts">
+          <div class="header">
+            <p class="subject">库存使用情况</p>
+          </div>
+          <div class=" chartStoreInfo">1</div>
+        </el-card>
+        <!-- 饼形状 -->
+        <el-card class="libs-charts">
+          <div class="header">
+            <div class="subject">库区使用情况</div>
+          </div>
+          <div class="pieChart" />
+        </el-card>
+
+      </div>
     </div>
   </div>
 </template>
 
 <script>
 
-import { getsStockUseStatus } from '@/api/home'
+import { getAreaUseStatus, getsStockUseStatus, getStoreInfo } from '@/api/home'
 import TaskBar from '@/views/dashboard/components/taskBar'
 import TaskInfo from '@/views/dashboard/components/taskInfo'
+import * as echarts from 'echarts'
 
 export default {
   name: 'Dashboard',
@@ -103,25 +121,195 @@ export default {
     TaskInfo
   },
   data() {
-    return { todo: '' }
+    return {
+      todo: '',
+      storeInfo: [] // 库存使用情况数据
+    }
   },
   created() {
     this.getsStockUseStatus()
+    this.getStoreInfo()
+    this.getAreaUseStatus() // 库区使用情况
+  },
+  mounted() {
+    this.charPie()
   },
   methods: {
+    // 代办事项请求
     async getsStockUseStatus() {
-      const { data: res } = await getsStockUseStatus()
-      console.log(res)
+      const res = await getsStockUseStatus()
+      res[0].color = 'rgb(0, 118, 255)'
+      res[1].color = 'rgb(255, 178, 0)'
+      res[2].color = 'rgb(255, 113, 0)'
+      res[0].icon = 'icon-rukudan'
+      res[1].icon = 'icon-chukudan'
+      res[2].icon = 'icon-pandiandan'
+      this.todo = res
+    },
+    async getStoreInfo() {
+      this.storeInfo = await getStoreInfo()
+      this.chartStoreInfo()
+    },
+    // 原型图图标
+    chartStoreInfo() {
+      const myCEchar = document.querySelector('.chartStoreInfo')
+      echarts.init(myCEchar).setOption(
+        {
+          tooltip: {
+            trigger: 'item',
+            backgroundColor: 'rgba(0,0,0,0)' // 设置背景图片 rgba格式
+          },
+          color: ['#ffaa00', '#e4dbda'],
+          series: [
+            {
+              type: 'pie',
+              radius: ['35%', '50%'],
+              avoidLabelOverlap: false,
+              label: {
+                show: false,
+                position: 'center'
+              },
+              emphasis: {
+                label: {
+                  show: true,
+                  fontSize: '12',
+                  fontWeight: 'bold',
+                  textStyle: {
+                    color: '#ffaa00'// 文字颜色
+                  }
+                }
+              },
+              labelLine: {
+                show: true
+              },
+              data: [
+                this.storeInfo[1],
+                this.storeInfo[0]
+              ]
+            }
+          ]
+        }
+      )
+    },
+    // 饼形请求数据 库区使用情况
+    async getAreaUseStatus() {
+      // 数据是空的
+      await getAreaUseStatus()
+      // console.log(res)
+    },
+    //  饼状
+    charPie() {
+      const mychar = document.querySelector('.pieChart')
+      const mychart = echarts.init(mychar)
 
-      if (res.isError) return this.$message.error('请求失败或错误')
-      res.data[0].color = 'rgb(0, 118, 255)'
-      res.data[1].color = 'rgb(255, 178, 0)'
-      res.data[2].color = 'rgb(255, 113, 0)'
-      res.data[0].icon = 'icon-rukudan'
-      res.data[1].icon = 'icon-chukudan'
-      res.data[2].icon = 'icon-pandiandan'
+      const option = {
+        color: ['#0076FF', '#52D4F3', '#5D7092', '#FFB200', '#FF7C00'],
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b} : {d}%',
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          borderWidth: '0',
+          textStyle: {
+            color: '#fff'
+          }
+        },
+        legend: [
+          {
+            icon: 'circle',
+            itemWidth: 10, // 设置宽度
+            itemHeight: 10,
+            top: 'center',
+            right: '40%',
+            orient: 'vertical',
+            formatter: '{name}',
+            itemGap: 20
+          },
+          {
+            itemWidth: '0',
+            top: 'center',
+            right: '30%',
+            orient: 'vertical',
+            itemGap: 20,
+            formatter: function(name) {
+              const data = option.series[0].data
+              // console.log(data, 'data')
+              let total = 0
+              let tarValue
+              for (let i = 0; i < data.length; i++) {
+                total += data[i].value
+                if (data[i].name === name) {
+                  tarValue = data[i].value
+                }
+              }
+              // const v = tarValue
+              // 计算出百分比
+              const p = Math.round((tarValue / total) * 100) + '%'
+              return `${p}`
+              // name是名称，v是数值
+            }
+          },
+          {
+            itemWidth: '0',
+            top: 'center',
+            right: '20%',
+            orient: 'vertical',
+            itemGap: 20,
+            formatter: function(name) {
+              const data = option.series[0].data
+              // console.log(data, 'data')
+              // eslint-disable-next-line no-unused-vars
+              let total = 0
+              let tarValue
+              for (let i = 0; i < data.length; i++) {
+                total += data[i].value
+                if (data[i].name === name) {
+                  tarValue = data[i].value
+                }
+              }
+              const v = tarValue
+              // 计算出百分比
+              // const p = Math.round((tarValue / total) * 100) + '%'
+              return `${v}`
+              // name是名称，v是数值
+            }
+          }
+        ],
+        series: [
+          {
+            name: 'Access From',
+            type: 'pie',
+            avoidLabelOverlap: false,
+            itemStyle: {
+              // borderRadius: 10,
+              borderColor: '#fff',
+              borderWidth: 2
+            },
+            center: ['30%', '50%'],
+            radius: '70%',
+            label: {
+              show: false,
 
-      this.todo = res.data
+              normal: {
+                show: true,
+                position: 'inner', // 数值显示在内部
+                formatter: '{c}',
+                color: '#fff'
+              }
+            },
+            labelLine: {
+              show: false
+            },
+            data: [
+              { value: 348, name: '拣货区' },
+              { value: 487, name: '出库区' },
+              { value: 677, name: '暂存库区' },
+              { value: 126, name: '进货暂存区' },
+              { value: 298, name: '出货暂存区' }
+            ]
+          }
+        ]
+      }
+      mychart.setOption(option)
     }
   }
 }
@@ -130,7 +318,8 @@ export default {
 <style lang="scss" scoped>
 .dashboard {
   &-container {
-    margin: 30px;
+    padding: 20px 50px 30px;
+    background: #fdfafa;
   }
 
   &-text {
@@ -367,6 +556,52 @@ export default {
           margin-top: 10px;
         }
       }
+    }
+  }
+}
+
+.libs {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 30px;
+
+  .use-charts {
+    width: 30%;
+    height: 354px;
+    background: #fff;
+    box-shadow: 0 0 6px 0 rgb(144 142 142 / 17%);
+    border-radius: 12px;
+    //padding: 25px;
+    margin-right: 30px;
+
+    .chartStoreInfo {
+      width: 100%;
+      height: 330px;
+    }
+  }
+
+  .header {
+    .subject {
+      font-size: 16px;
+      font-family: PingFangSC-Semibold, PingFang SC;
+      font-weight: 600;
+      color: #332929;
+      margin: 0;
+    }
+  }
+
+  .libs-charts {
+    width: 70%;
+    height: 354px;
+    background: #fff;
+    box-shadow: 0 0 6px 0 rgb(144 142 142 / 17%);
+    border-radius: 12px;
+
+    .pieChart {
+      width: 1060px;
+      height: 280px;
+      //background: pink;
     }
   }
 }
